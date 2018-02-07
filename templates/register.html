@@ -1,0 +1,104 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<script type="text/javascript">
+function validateEmail(email) {
+
+    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    return emailReg.test(email);
+    }
+
+function validatePassword(password) {
+
+    var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}/;
+    return re.test(password);
+    }
+
+function validatePhone(phone) {
+
+    var number = /[0-9].{10,15}/;
+    return number.test(phone);
+    }
+
+$( document ).ready(function() {
+
+    var that;
+    console.log( "ready!" );
+    $("form").on("submit",function(event){
+
+        var flag = true;
+        var empname = $("input[name = 'EmpName']").val();
+        var address = $("input[name = 'Address']").val();
+        var email = $("input[name = 'EmailId']").val();
+        var password = $("input[name = 'Password']").val();
+        var phone = $("input[name = 'Phone']").val();
+
+        if(empname == "") {
+            $("span#name-error").html("Please enter name");
+            flag = false;
+        } else
+            $("span#name-error").html("");
+
+        if(address == "") {
+            $("span#address-error").html("Please enter address");
+            flag = false;
+        } else {
+            $("span#address-error").html("");
+        }
+
+        if (email && validateEmail(email)) {
+            $("span#email-error").html("");
+        } else {
+            $("span#email-error").html("Please enter valid email address");
+            flag = false;
+        }
+
+        if (validatePassword(password)) {
+            $("span#password-error").html("");
+        } else {
+            $("span#password-error").html("Password should be at least one number, one lowercase , one uppercase letter and at least 6 to 15 characters");
+            flag = false;
+        }
+
+        if(validatePhone(phone)) {
+            $("span#phone-error").html("");
+        } else {
+           $("span#phone-error").html("Phone shuild be at least 10 to 15 digit");
+            flag = false;
+        }
+
+        if(flag== false)
+            event.preventDefault();
+    });
+});
+
+</script>
+
+<form id="signupform" action = {% url 'signup' %} method="post" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    EmpName: <input type = "text" name = "EmpName"><br />
+    <span id="name-error" style="color:red;"></span><br />
+
+    Address: <input type = "text" name = "Address" /><br />
+    <span id="address-error" style="color:red;"></span><br />
+
+    Email Id: <input type = "text" name = "EmailId"><br />
+    <span id="email-error" style="color:red;"></span><br />
+
+    Password: <input type = "password" name = "Password",id="password"><br />
+    <span id="password-error" style="color:red;"></span><br />
+
+    Phone: <input type = "text" name = "Phone" /><br />
+    <span id="phone-error" style="color:red;"></span><br />
+
+    <input id="id_image" type="file" class="" name="Image"><br /><br />
+
+    <input type="submit" value = "Sign Up" />
+
+
+
+</form>
+</html>
