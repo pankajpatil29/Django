@@ -1,0 +1,52 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<script type="text/javascript">
+    function validateEmail(email) {
+
+    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    return emailReg.test(email);
+    }
+$( document ).ready(function() {
+
+    var that;
+    console.log( "ready!" );
+    $("form").on("submit",function(event){
+
+        var flag = true;
+        var email = $("input[name = 'EmailId']").val();
+        var password = $("input[name = 'Password']").val();
+
+        if (email && validateEmail(email)) {
+            $("span#email-error").html("");
+        } else {
+            $("span#email-error").html("Please enter valid email address");
+            flag = false;
+        }
+        if(password == "") {
+            $("span#password-error").html("Please enter password");
+            flag = false;
+        } else
+            $("span#password-error").html("");
+
+
+        if(flag== false)
+            event.preventDefault();
+    });
+});
+
+</script>
+<form action = {% url 'login' %} method="post" id="loginform">
+
+    {% csrf_token %}
+
+    Email Id: <input type = "text" name = "EmailId"><br />
+    <span id="email-error" style="color:red;"></span><br />
+    Password: <input type = "password" name = "Password",id="Password"><br />
+    <span id="password-error" style="color:red;"></span><br /><br />
+
+
+    <input type = "submit" value = "Log In" />
+</form>
+</html>
